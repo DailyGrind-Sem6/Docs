@@ -1,16 +1,7 @@
-# Project Overview
+# Deploying the application to Kubernetes (Minikube)
 
-This project is a microservices-based application that uses Docker and Kubernetes for containerization and orchestration. The application consists of the following services:
-
-- **Zookeeper**: A service used for maintaining configuration information, naming, providing distributed synchronization, and providing group services.
-
-- **Kafka**: A distributed streaming platform used for building real-time data pipelines and streaming apps. In this project, it's used as a message broker between services.
-
-- **Frontend**: The user interface of the application, built with React.
-
-- **API Gateway**: A service that acts as a single entry point into the system, allowing multiple APIs or microservices to act cohesively and provide a uniform experience to the user.
-
-- **Post Service**: A service responsible for handling all the operations related to posts in the application.
+By this part, I have already created a Docker Compose file for the application, which will spin up all necessary services for my application within Docker. Now, I will convert the Docker Compose file to Kubernetes configuration files using `Kompose`.
+I will then deploy the application to a local Kubernetes cluster using Minikube.
 
 ## Converting Docker Compose to Kubernetes
 
@@ -92,36 +83,6 @@ You will see output similar to the following:
 🚀  Launching proxy ...
 🤔  Verifying proxy health ...
 🎉  Opening http://127.0.0.1:51621/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/ in your default browser...
-```
-
-## Testing pod communication
-
-To test the communication between pods, you need to access it's shell. In this example, we will access the shell of the `frontend` pod and send a request to the `/api/posts` endpoint of the `api-gateway` pod.
-You can access the shell of the `frontend` pod with the following command:
-
-```Bash
-kubectl exec -it service/frontend -- sh
-```
-
-Your shell prompt will change to something similar to the following:
-```Bash
-/app #
-```
-
-Now you can send a request to the `api-gateway` pod with the following command:
-```Bash
-curl api-gateway:8080/api/posts
-```
-
-If your pods are setup correctly you should see the data returned by your API endpoint:
-
-```Bash
-{"message":"bzbz"}/app #
-```
-
-You may receive a message that `curl` is not installed. If so, you can install it with the following command:
-```Bash
-apk add --no-cache curl
 ```
 
 ## Cleaning Up
