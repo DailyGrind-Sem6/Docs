@@ -25,7 +25,7 @@ Post Service
 
 The frontend service is a React application that serves the user interface for the application. The Dockerfile for the frontend service might look something like this:
 
-```Dockerfile
+```Docker
 FROM node:21-alpine AS build
 
 WORKDIR /app
@@ -55,7 +55,7 @@ This Dockerfile uses a multi-stage build to first build the React application an
 
 The API Gateway service is an ASP.Net Core application that acts as a reverse proxy for the other services. The Dockerfile for the API Gateway service looks like this:
 
-```Dockerfile
+```Docker
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
@@ -86,7 +86,7 @@ This Dockerfile sets up the API Gateway service to run on port 8080 and copies t
 
 The Post Service is an ASP.Net Core application that provides an API for creating and retrieving posts. The Dockerfile for the Post Service looks like this:
 
-```Dockerfile
+```Docker
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
