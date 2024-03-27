@@ -84,7 +84,7 @@ CMD ["nginx", "-g", "daemon off;"]
 
 I created a folder called `.nginx` and created a new file inside called `nginx.conf`. The `nginx.conf` file is a configuration file for nginX that sets up the reverse proxy to the API Gateway. The `nginx.conf` file looks like this:
 
-```nNGINX
+```
 events {  }
 
 http {
