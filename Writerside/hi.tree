@@ -3,9 +3,10 @@
         SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
 
 <instance-profile id="hi"
-                 name="Help Instance"
+                 name="DailyGrind"
                  start-page="Default-topic.md">
 
+    <toc-element topic="Project-overview.md"/>
     <toc-element topic="Dockerizing-the-app.md"/>
     <toc-element topic="Default-topic.md">
     </toc-element>

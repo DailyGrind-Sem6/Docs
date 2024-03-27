@@ -1,6 +1,6 @@
 # Deploying the application to Kubernetes (Minikube)
 
-By this part, I have already created a Docker Compose file for the application, which will spin up all necessary services for my application within Docker. Now, I will convert the Docker Compose file to Kubernetes configuration files using `Kompose`.
+By this part, I have already created a Docker Compose file for the application, which will spin up all necessary services for my application within Docker. In order to deploy the app to Kubernetes, I need to convert the Docker compose file to Kubernetes configuration files using `Kompose`.
 I will then deploy the application to a local Kubernetes cluster using Minikube.
 
 ## Converting Docker Compose to Kubernetes
@@ -58,15 +58,61 @@ You will see output similar to the following:
 
 4. Apply the generated Kubernetes configuration files using `kubectl apply -f ./`.
 
-5. To access the frontend and API gateway on your local machine, you need to port forward the services:
+5. In order to access the frontend, you can run `minikube service frontend`. This should open a new tab in your browser with the frontend of your application.
 
-```bash
-kubectl port-forward service/frontend 3000:3000
-kubectl port-forward service/api-gateway 8080:8080
+> The code in your frontend should make a request to the API Gateway using the servicename, in my case, `api-gateway`, the Kubernetes cluster will recognize the servicename and translate it to the corresponding IP address. Although this may cause errors if the frontend is not properly configured.
+>
+{style="warning"}
+
+My frontend makes use of nginX as a reverse proxy to the API Gateway to fix this issue. I changed the existing frontend Dockerfile to also include nginX and copy over the configuration file for nginX. This is the section that was added to the Dockerfile:
+
+```Docker
+FROM nginx:alpine
+
+COPY ./.nginx/nginx.conf /etc/nginx/nginx.conf
+
+COPY --from=build /app/dist /usr/share/nginx/html
+
+EXPOSE 3000
+
+CMD ["nginx", "-g", "daemon off;"]
 ```
-This will allow you to access the frontend at `http://localhost:3000`, because the app is only accessable from within the cluster.
 
-6. Open your web browser and navigate to `http://localhost:3000` to access the frontend.
+> The Node section's `EXPOSE` and `CMD` commands were removed and replaced with the above code. 
+> 
+{style="info"}
+
+I created a folder called `.nginx` and created a new file inside called `nginx.conf`. The `nginx.conf` file is a configuration file for nginX that sets up the reverse proxy to the API Gateway. The `nginx.conf` file looks like this:
+
+```nNGINX
+events {  }
+
+http {
+    server {
+        listen 3000;
+        root  /usr/share/nginx/html;
+        include /etc/nginx/mime.types;
+        
+        location /api/ {
+            proxy_pass http://api-gateway:8080;
+        }
+    }
+}
+```
+
+This configuration sets up nginX to listen on port 3000 (my React frontend) and serve the files in `/usr/share/nginx/html`. It also sets up a reverse proxy to the API Gateway service when a request is made to `/api/`.
+
+After making this change, I changed the API calls in my frontend to not use the host and port, but instead start from `/api/` to make the request to the API Gateway. This way, the frontend will work correctly when deployed to Kubernetes. The API calls in my frontend went from:
+
+```JavaScript
+const response = await fetch('http://localhost:8080/api/posts');
+```
+
+to:
+
+```JavaScript
+const response = await fetch('/api/posts');
+```
 
 ## Kubernetes dashboard
 

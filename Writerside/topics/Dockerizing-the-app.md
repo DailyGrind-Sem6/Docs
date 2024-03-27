@@ -117,7 +117,7 @@ This Dockerfile sets up the Post Service to run on port 8081 and copies the buil
 ## Docker Compose
 Docker Compose is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application's services. Then, with a single command, you create and start all the services from your configuration.
 
-In my case, I have a docker-compose.yml file that defines the services that make up my application so they can be run together in an isolated environment.
+In my case, I have a docker-compose.yml file that defines the services that make up my application, so they can be run together in an isolated environment. It's located in the same directory as the projects for each service, so it can reach and reference the Dockerfiles for each service.
 
 Here is the docker-compose.yml file:
 
@@ -211,9 +211,6 @@ api-gateway
 
 post-service
 : This service depends on the kafka service. It builds from a Dockerfile located in the ./Post-Service directory and is named post-service. It exposes port 8081 and is part of the backend network.
-
-networks
-: A network named backend is defined. All services are part of this network, allowing them to communicate with each other.
 
 This file tells Docker to:
 - Build the image for each service using the Dockerfile in the specified location.
