@@ -4,10 +4,10 @@
 
 <instance-profile id="hi"
                  name="DailyGrind"
-                 start-page="Default-topic.md">
+                 start-page="Project-overview.md">
 
     <toc-element topic="Project-overview.md"/>
     <toc-element topic="Dockerizing-the-app.md"/>
-    <toc-element topic="Default-topic.md">
+    <toc-element topic="Kubernetes-deployment.md">
     </toc-element>
 </instance-profile>
