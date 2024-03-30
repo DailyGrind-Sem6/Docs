@@ -10,4 +10,5 @@
     <toc-element topic="Dockerizing-the-app.md"/>
     <toc-element topic="Kubernetes-deployment.md">
     </toc-element>
+    <toc-element topic="Azure-Kubernetes-Service.md"/>
 </instance-profile>
