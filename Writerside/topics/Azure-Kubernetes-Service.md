@@ -4,7 +4,7 @@ Azure Kubernetes Service (AKS) is a managed Kubernetes service provided by Micro
 
 ## Azure CLI
 
-After installing the Azure CLI, I attempted to deploy some containers to AKS. However after running the command `az aks get-credentials --resource-group myResourceGroup --name myAKSCluster`, I received the following error:
+After installing the Azure CLI, I attempted to deploy some containers to AKS. However, after running the command `az aks get-credentials --resource-group myResourceGroup --name myAKSCluster`, I received the following error:
 
 ```Bash
 The client '[ACCOUNT-EMAIL]' with object id '[OBJECT-ID]' does not have authorization to perform action 'Microsoft.ContainerService/managedClusters/listClusterUserCredential/action' over scope '[CLUSTER-NAME]' or the scope is invalid. If access was recently granted, please refresh your credentials.
