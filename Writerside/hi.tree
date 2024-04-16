@@ -6,6 +6,11 @@
                  name="DailyGrind"
                  start-page="Project-overview.md">
 
+    <toc-element topic="API_Reference.md">
+        <toc-element topic="Get_a_post_by_ID.md"/>
+        <toc-element topic="Create_a_new_post.md"/>
+        <toc-element topic="Get_all_posts.md"/>
+    </toc-element>
     <toc-element topic="Project-overview.md"/>
     <toc-element topic="Dockerizing-the-app.md"/>
     <toc-element topic="Kubernetes-deployment.md">

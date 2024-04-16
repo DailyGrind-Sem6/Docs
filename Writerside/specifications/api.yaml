@@ -1,0 +1,68 @@
+openapi: 3.0.0
+info:
+  title: Posts API
+  version: 1.0.0
+paths:
+  /api/Posts:
+    get:
+      summary: Get all posts
+      responses:
+        '200':
+          description: A list of posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+    post:
+      summary: Create a new post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Post'
+      responses:
+        '200':
+          description: The created post
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+  /api/Posts/{id}:
+    get:
+      summary: Get a post by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A post
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+components:
+  schemas:
+    Post:
+      type: object
+      properties:
+        Id:
+          type: string
+          format: uuid
+        Title:
+          type: string
+        Content:
+          type: string
+        CreatedAt:
+          type: string
+          format: date-time
+        UpdatedAt:
+          type: string
+          format: date-time
+        UserId:
+          type: string

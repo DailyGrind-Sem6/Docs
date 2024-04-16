@@ -10,4 +10,40 @@
         <description>Created after removal of "Deploying the app to kubernetes" from Help Instance</description>
         <accepts>Deploying-the-app-to-kubernetes.html</accepts>
     </rule>
+    <rule id="690cdf53">
+        <description>Created after removal of "Endpoints" from DailyGrind</description>
+        <accepts>Endpoints.html</accepts>
+    </rule>
+    <rule id="107e8ce0">
+        <description><![CDATA[Created after removal of "<Endpoints.md>" from DailyGrind]]></description>
+        <accepts>Endpoints.html</accepts>
+    </rule>
+    <rule id="540c9a48">
+        <description>Created after removal of "Schemas" from DailyGrind</description>
+        <accepts>Schemas.html</accepts>
+    </rule>
+    <rule id="373d360b">
+        <description>Created after removal of "Post" from DailyGrind</description>
+        <accepts>Post.html</accepts>
+    </rule>
+    <rule id="74ed344">
+        <description>Created after removal of "Get a post by ID" from DailyGrind</description>
+        <accepts>Get_a_post_by_ID.html</accepts>
+    </rule>
+    <rule id="73b7fdc7">
+        <description>Created after removal of "Create a new post" from DailyGrind</description>
+        <accepts>Create_a_new_post.html</accepts>
+    </rule>
+    <rule id="366fc6f6">
+        <description>Created after removal of "Get all posts" from DailyGrind</description>
+        <accepts>Get_all_posts.html</accepts>
+    </rule>
+    <rule id="6140681">
+        <description>Created after removal of "API Reference" from DailyGrind</description>
+        <accepts>API_Reference.html</accepts>
+    </rule>
+    <rule id="6713263d">
+        <description>Created after removal of "API Reference" from DailyGrind</description>
+        <accepts>API_Reference.html</accepts>
+    </rule>
 </rules>
