@@ -9,6 +9,7 @@ The platform is composed of several microservices, each serving a specific funct
 - **Frontend**: A React application that serves the user interface for the platform.
 - **API Gateway**: An ASP.Net Core application that acts as a reverse proxy for the other services.
 - **Post Service**: An ASP.Net Core application that provides an API for creating and retrieving posts.
+- **Posts Database**: A MongoDB database that stores the posts created by users.
 
 These services communicate with each other using Kafka, a distributed streaming platform. The entire application is containerized using Docker, which allows for easy deployment and scaling.
 

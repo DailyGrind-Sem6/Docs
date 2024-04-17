@@ -19,6 +19,9 @@ API Gateway
 Post Service
 : The Post Service is an ASP.Net Core application that provides an API for creating and retrieving posts.
 
+Posts Database
+: The Posts Database is a MongoDB database that stores the posts created by users.
+
 ## Creating Dockerfiles
 
 ### Frontend Dockerfile
@@ -188,10 +191,25 @@ services:
          - kafka
       networks:
          - backend
+   postdb:
+     container_name: postdb
+     image: mongo:latest
+     environment:
+       MONGO_INITDB_ROOT_USERNAME: root
+       MONGO_INITDB_ROOT_PASSWORD: root
+     volumes:
+       - mongodb_data:/data/db
+     ports:
+       - '27017:27017'
+     networks:
+       - backend
 
 networks:
    backend:
       name: backend
+
+volumes:
+  mongodb_data:
 ```
 This `docker-compose.yml` file defines the services that make up my application, including Zookeeper, Kafka, the frontend, the API Gateway, and the Post Service. It sets up the necessary environment variables and ports for each service and specifies the dependencies between the services.
 
@@ -211,6 +229,9 @@ api-gateway
 
 post-service
 : This service depends on the kafka service. It builds from a Dockerfile located in the ./Post-Service directory and is named post-service. It exposes port 8081 and is part of the backend network.
+
+postdb
+: This service uses the mongo:latest image and is named postdb. It exposes port 27017 and is part of the backend network. Several environment variables are set to configure MongoDB, and a volume is mounted to persist the data.
 
 This file tells Docker to:
 - Build the image for each service using the Dockerfile in the specified location.
