@@ -18,4 +18,5 @@
     <toc-element topic="Loadtesting.md"/>
     <toc-element topic="Azure-Kubernetes-Service.md"/>
     <toc-element topic="Auth0.md"/>
+    <toc-element topic="Research-Testing-and-Monitoring.md"/>
 </instance-profile>
