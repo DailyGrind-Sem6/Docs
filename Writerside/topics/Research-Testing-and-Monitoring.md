@@ -35,13 +35,13 @@ These methodologies test different scopes of the system, making them more useful
 
 Integration testing, on the other hand, tests multiple of these "units" together, testing the interaction between them aswell. This might give you less control since, if an error does occur, it might make it harder to find the source of the error.
 
-### Conclusion
+### Conclusion on Testing Methodologies
 
 Meaning, when the individual parts of the application aren't too complex with many steps, integration testing will suffice. Since there aren't many steps in the overall process, it will be easier to find the source of the error if one does arise.
 
 When the application has grown more complex features and logic, it may be worth to write seperate tests for those individual sections. That way, you have more control over the tests and can pinpoint the source of the error more easily.
 
-### DOT Framework
+### DOT Framework for Testing
 
 **Best good and bad practices:**
 
@@ -51,7 +51,7 @@ I've explored various testing methodologies such as Unit Testing, Integration Te
 
 I've looked into implementations of the test methods to prepare my own tests. This involves researching and referencing various resources such as articles, blogs, and tutorials on testing microservices, integration tests in ASP.NET Core, etc.
 
-### References
+### References for Testing
 
 - [Testing microservices](https://www.zartis.com/testing-microservices/)
 - [Writing tests for microservices](https://livebook.manning.com/book/microservices-in-net-core/chapter-7/)
@@ -105,18 +105,18 @@ All of these tools provide monitoring features, although there is a difference i
 | Installation | Cloud + local    | Local      | Local            |
 {style="both"}
 
-### Conclusion
+### Conclusion on Monitoring
 
 I decided to use [Grafana](https://grafana.com/) for the monitoring of my application, since it has a generous free-tier which gives you the ability to test features out. It also, unlike the others, has a cloud version which is easier to set up and use.
 
 Although, there is no right or wrong answer when it comes to monitoring tools, since they all perform more or less the same purpose. It's important to take a look at the project you work and see whether you have the need for a very specific feature and look for a tool that provides that.
 
-### DOT Framework
+### DOT Framework for Monitoring
 
 **Best good and bad practices:**
 
 I've explored various monitoring tools such as Prometheus, Grafana, etc. I've evaluated their use and relevancy in my context and app structure. This involves understanding the pricing policies and installation processes of each tool.
 
-### References
+### References for Monitoring
 - [Microservices Monitoring and Observability in Depth](https://medium.com/cloud-native-daily/microservices-monitoring-and-observability-in-depth-d40aa0795dd3)
 - [HOW TO CHOOSE A MICROSERVICES MONITORING TOOL](https://redis.io/blog/choose-microservice-monitoring-tool/)
