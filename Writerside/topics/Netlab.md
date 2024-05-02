@@ -49,6 +49,14 @@ NAME                 STATUS   ROLES                  AGE   VERSION
 ubuntu-server-22-4   Ready    control-plane,master   10m   v1.23.3+k3s1
 ```
 
+In order to run k8s commands without having to add `sudo k3s`, you can run the following command:
+
+```bash
+sudo chmod 644 /etc/rancher/k3s/k3s.yaml
+```
+
+This may have to be run again after a reboot.
+
 ## Github Actions Self-hosted Runner
 
 In order to use Github Actions on the Netlab VM, you need to set up a self-hosted runner. This runner will execute the Github Actions workflows on the VM. You can set up a self-hosted runner using the following steps:
@@ -83,4 +91,36 @@ When creating a new workflow, you can now select the self-hosted runner like thi
 jobs:
   build:
     runs-on: self-hosted
+```
+
+## Workflows
+
+Before you can run any workflows, you need to navigate to `Organization` -> `Settings` -> `Actions` -> `Runner Groups` -> and enable `Allow public repositories` in order for the runner to be able to run workflows on public repositories.
+
+After this, you can create a new workflow in your repository by creating a new file in the `.github/workflows` directory. this is an example file that I used for the workflow of my frontend:
+
+```yaml
+name: nelab-deploy
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+env:
+  DEPLOYMENT_MANIFEST_PATH: ./Manifest/frontend-deployment.yaml
+  SERVICE_MANIFEST_PATH: ./Manifest/frontend-service.yaml
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Apply Deployment manifest
+        run: sudo k3s kubectl apply -f ${{ env.DEPLOYMENT_MANIFEST_PATH }}
+
+      - name: Apply Service manifest
+        run: sudo k3s kubectl apply -f ${{ env.SERVICE_MANIFEST_PATH }}
 ```
