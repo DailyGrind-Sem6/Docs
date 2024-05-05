@@ -63,7 +63,52 @@ I've looked into implementations of the test methods to prepare my own tests. Th
 - [LinkedIn - Integration Test for Asp.Net Core API with Entity Framework using Testcontainers](https://www.linkedin.com/pulse/integration-test-aspnet-core-api-entity-framework-using-sarker/)
 - [Youtube - ASP.NET Core Integration Testing Tutorial](https://www.youtube.com/watch?v=RXSPCIrrjHc)
 
-## How can automated testing frameworks streamline the testing process and enhance the efficiency of development iterations?
+## How can automated code analysis frameworks streamline the testing process and enhance the efficiency of development iterations?
+
+Code analysis tools are used to analyze the codebase of a software project. They check for different things such as code quality, security vulnerabilities, and performance issues. So just because your unit/integration tests have passed, doesn't mean your code doesn't contain any issues.
+
+### Automated Code Analysis
+
+Automated code analysis tools can help streamline the testing process and enhance the efficiency of development iterations. These tools can be used to check for various issues in the codebase, such as:
+
+Code reliability
+: The tool can check for issues that might cause the code to behave unexpectedly.
+
+Code security
+: The tool can check for security vulnerabilities in the codebase.
+
+Code maintainability
+: The tool can check for issues that might make the code hard to maintain.
+
+### Added value
+
+These tools bring the added value of preventing issues from happening in the first place. By analyzing the code and marking sections that might prove problematic, you can fix these issues before they cause a real problem in the application.
+
+This in turn can save you time and money, since fixing issues after they've been deployed can be more costly than fixing them before they've been deployed. That is because you might have to do some debugging later on to find the source of the issue and then fix it, which is precious time that could've been spent on further development of the application.
+
+### Analysis Tools
+
+There are various code analysis tools that can be used to analyze the codebase of a software project. However the most used and known tools are:
+
+- SonarQube (SonarCloud)
+- Qodana (Jetbrains)
+
+These tools mostly perform the same tasks, but they might have some differences in their pricing policies and installation processes.
+
+### Conclusion on Automated Code Analysis
+
+I decided to use [SonarCloud](https://www.sonarsource.com/products/sonarcloud/) for the automated code analysis of my application, since it has a generous free-tier which gives you the ability to test features out. It also has a cloud version which is very easy to set up and use. At my scope, it didn't matter much which one I chose, since they all perform the same tasks, but at a larger scale,a deeper analysis of the tools might be needed.
+
+### DOT Framework for Automated Code Analysis
+
+**Available product analysis**
+
+I've looked into tools and platforms that may help me with automated code analysis. This involves researching and referencing various resources such as articles, blogs, and tutorials on SonarQube, Qodana, etc.
+
+### References for Automated Code Analysis
+- [OWASP - Static Code Analysis](https://owasp.org/www-community/controls/Static_Code_Analysis)
+- [Static Code Analysis: Everything You Need to Know](https://blog.codacy.com/static-code-analysis)
+- [Qodana](https://www.jetbrains.com/qodana/)
 
 ## What monitoring techniques should be implemented to detect potential issues in the platform?
 
