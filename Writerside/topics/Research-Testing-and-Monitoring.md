@@ -10,6 +10,8 @@ Testing the features of your application is a crucial step in the entire softwar
 
 This can help you keep track of issues that might arise after working on another part of the product. Since an addition or change in one part of the application can affect another part, it's important to test the application. This is where testing methodologies come in.
 
+Since there are different testing-methods, it's important to know which one to use in which situation, since different methods will be more useful in different situations. Because of this we come back to the question of **which testing methodologies are the most effective to ensure the features of the platform stay in good working order**.
+
 ### Testing Methodologies
 
 There are a number of testing methodologies that can be used to ensure the features of the platform stay in working order. Some of the most used methodologies include:
@@ -26,8 +28,28 @@ System Testing
 Performance Testing
 : The process of testing the performance of the system under different conditions.
 
-These testing methodologies differ in various ways, one of them being the scope of the testing. Unit testing, for example, focuses on testing individual components of the system, while system testing focuses on testing the system as a whole. These differences cause the methodologies to be most useful in different situations and system-types.
+#### Unit testing
+These testing methodologies differ in various ways, one of them being the scope of the testing. Unit testing, for example, focuses on testing individual components of the system in isolation. That means that you can test the individual pieces of logic in the system, giving you more precise control and feedback on the test.
+
+![diagram-export-5-12-2024-6_12_39-PM.png](unit-test-area.png)
+
+The area colored in red represents the scope of unit testing, which is in this case the service layer of the application. This layer handles the business logic of the application, meaning that such a test would test the individual pieces of logic in the system.
+
+#### Integration testing
+
+While integration testing focuses on testing multiple units together along with the interaction between them. This might give you less control since, if an error does occur, it might make it harder to find the source of the error.
+
+![diagram-export-5-12-2024-6_18_27-PM.png](integration-test-area.png)
+
+The area colored in red here represents the scope of integration testing, which is in this case the controller, service layer and the data access layer of the application. These layers handle the interaction between the different parts of the application, meaning that such a test would test the interaction between the different parts of the application.
+
+These differences cause the methodologies to be most useful in different situations and system-types.
 This semester, focussing on enterprise-level software, I will need to use a combination of these methodologies to make sure my application is reliable and performs well.
+
+#### Load Testing
+
+Load testing is another important testing methodology that can be used to ensure the features of the platform stay in good working order. Load testing is the process of testing the performance of the system under different load conditions. This can help you identify bottlenecks in the system and make sure it can handle the expected load.
+This is done by simulating a large number of users accessing the system at the same time and measuring the performance of the system under these conditions. If the system can't handle the load, you might need to make some changes to the system to make sure it can handle the expected load.
 
 ### When to use which methodology
 
