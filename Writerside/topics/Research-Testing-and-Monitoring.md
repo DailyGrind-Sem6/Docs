@@ -4,64 +4,113 @@
 
 This is a research document that will explore the different testing and monitoring strategies that can be used to keep the reliability and performance optimal of a coffee-focused community platform.
 
-## What are the most effective testing methodologies to ensure the features of the platform stay in good working order?
+## Which testing methods can be used to ensure the features of the coffee-based community platform are always working?
 
-Testing the features of your application is a crucial step in the entire software development process. After putting in a lot of effort into building a product, you want to make sure that product stays working. 
+Testing the features of an application is a crucial step in the entire software development process. After putting in effort into building a product, it's also important to make sure that product stays working. 
 
-This can help you keep track of issues that might arise after working on another part of the product. Since an addition or change in one part of the application can affect another part, it's important to test the application. This is where testing methodologies come in.
+Since there are different testing-methods, it's important to know which one to use in which situation, since different methods will be more useful in different situations. Because of this we come back to the question of **which testing methods can be used to ensure the features of the coffee-based community platform are always working**.
 
-Since there are different testing-methods, it's important to know which one to use in which situation, since different methods will be more useful in different situations. Because of this we come back to the question of **which testing methodologies are the most effective to ensure the features of the platform stay in good working order**.
+### Testing Methods
 
-### Testing Methodologies
-
-There are a number of testing methodologies that can be used to ensure the features of the platform stay in working order. Some of the most used methodologies include:
-
-Unit Testing
-: The process of testing individual components of a system in isolation.
-
-Integration Testing
-: The process of testing how individual components work together.
-
-System Testing
-: The process of testing the system as a whole.
-
-Performance Testing
-: The process of testing the performance of the system under different conditions.
+Let's take a look at the different testing methods that are available and see how they differ from each other.
 
 #### Unit testing
-These testing methodologies differ in various ways, one of them being the scope of the testing. Unit testing, for example, focuses on testing individual components of the system in isolation. That means that you can test the individual pieces of logic in the system, giving you more precise control and feedback on the test.
 
-![diagram-export-5-12-2024-6_12_39-PM.png](unit-test-area.png)
+Konghq.com describes unit tests as:
+> At the bottom of the testing pyramid are unit tests, which focus on the smallest testable unit in your codebase, typically a method or a function. [[1]](#references-for-testing)
 
-The area colored in red represents the scope of unit testing, which is in this case the service layer of the application. This layer handles the business logic of the application, meaning that such a test would test the individual pieces of logic in the system.
+This means that unit tests only focus on the smallest piece of your code. This becomes useful when wanting to test isolated pieces of logic for example.
+
+Konghq.com also mentions about unit tests:
+> given a particular circumstance, when x happens, then the result should be y. [[1]](#references-for-testing)
+
+They talk about the *given* element being anything that your unit may need in order to work properly. Dependencies on other collaborators are allowed, which would be called *sociable unit tests*. Or they may be replaced by "test doubles" in order to ensure isolation, called *solitary unit tests*. Which can be achieved by created mocks and stubs.
+
+If this scope were to be visualized, it would look like this:
+
+![unit-test-area_light.png](unit-test-area_light.png)
+*A diagram highlighting in red the scope of unit testing in a system.*
+
+If a unit test only tests the smallest piece of ones code, it would only encompass one layer of the application, in this case, the service layer.
 
 #### Integration testing
 
-While integration testing focuses on testing multiple units together along with the interaction between them. This might give you less control since, if an error does occur, it might make it harder to find the source of the error.
+As for integration tests, Konghq.com describes them as:
+> Often microservices depend on calls to external modules, such as a data store or file system, and to other services. Integration tests verify that the interactions between these modules and services work as intended. [[1]](#references-for-testing)
 
-![diagram-export-5-12-2024-6_18_27-PM.png](integration-test-area.png)
+This shows that the scope of the test is being widened, since it's not only testing the smallest piece of code, but also the interaction between different pieces of code. What the actual services are, can be different as mentioned in the quote, it can be a data store, file system or other services.
 
-The area colored in red here represents the scope of integration testing, which is in this case the controller, service layer and the data access layer of the application. These layers handle the interaction between the different parts of the application, meaning that such a test would test the interaction between the different parts of the application.
+![integration-test-area_light.png](integration-test-area_light.png)
+*A diagram highlighting in red the scope of integration testing in a system.*
 
-These differences cause the methodologies to be most useful in different situations and system-types.
-This semester, focussing on enterprise-level software, I will need to use a combination of these methodologies to make sure my application is reliable and performs well.
+If an integration test tests the interaction between different pieces of code, it would encompass multiple layers of the application, in this case, the service layer and the data access layer.
 
-#### Load Testing
+#### Component testing
 
-Load testing is another important testing methodology that can be used to ensure the features of the platform stay in good working order. Load testing is the process of testing the performance of the system under different load conditions. This can help you identify bottlenecks in the system and make sure it can handle the expected load.
-This is done by simulating a large number of users accessing the system at the same time and measuring the performance of the system under these conditions. If the system can't handle the load, you might need to make some changes to the system to make sure it can handle the expected load.
+Another test mentioned when it comes to testing microservices is component testing. Konghq.com describes component tests as:
+> a component test verifies the behavior of an entire component in isolation. [[1]](#references-for-testing)
+> 
+> ...
+> 
+> How you define a component depends on your application, but a useful starting point is to think of each individual microservice as a component. [[1]](#references-for-testing)
 
-### When to use which methodology
+This gives a clear definition of what a `component` is, since it could be interpreted in different ways. So in this case, a component test would test the behavior of an entire microservice in isolation.
 
-These methodologies test different scopes of the system, making them more useful in some situations than others. When unit testing, one may test the individual pieces of logic in the system, giving you more precise control and feedback on the test.
+This would add the entrypoint layer to the scope of the test, meaning sending a request to the controller methods and checking the response sent back.
 
-Integration testing, on the other hand, tests multiple of these "units" together, testing the interaction between them aswell. This might give you less control since, if an error does occur, it might make it harder to find the source of the error.
+![component-test-area_light](component-test-area_light.png)
+*A diagram highlighting in red the scope of component testing in a system.*
+
+This would be the final layer of tests that deal with one microservice in isolation.
+
+#### Performance Testing
+
+Another type of test mentioned online is Performance testing. According to browserstack.com, performance testing can be classified as:
+
+> Performance Testing is a type of software testing for evaluating how a certain software performs under variant conditions. Performance, in this case, refers to multiple variables: stability, scalability, speed, and responsiveness – all under numerous levels of traffic and load. [[2]](#references-for-testing)
+
+Out of this we can derive that performance testing simulates varying conditions to see how the software performs under different circumstances. When reading further performance testing is divided into different types of tests and explained what each test is used for [[2]](#references-for-testing) , such as:
+
+- Load Testing
+> Measures system performance under varying load levels, AKA the number of simultaneous users running transactions.
+
+In the context of my project, this would be helpful. Since a community platform can have many users at the same time, it's important to know how the system performs under different load levels.
+
+- Stress Testing
+> Also known as fatigue testing, it measures how the system performs in abnormal user conditions. It is used to determine the limit at which the software actually breaks and malfunctions.
+
+This method talks about abnormal user conditions, meaning a large volume of users. Community platforms aren't the type of applications that would see sudden influxes of large amounts of users visiting the platform for instance. This might be more useful for a platform like streaming site, where an event or a famous figure hosting a stream could draw in a large amount of users. 
+
+- Endurance Testing
+> Also known as soak testing, it evaluates how the software will perform under normal loads over a long period of time.
+
+As mentioned by the description, this test uses a normal load over a long period of time. Like I said before, a community platform wouldn't necessarily see a large influx of users interacting with the platform, therefore this test wouldn't be as useful, to see what high traffic over a long period of time would do to the system.
+
+- Spike Testing
+> Repeatedly evaluates how the software performs when subjected to high traffic and usage levels in short periods.
+
+Also for this method, the slower nature of a community platform wouldn't see sudden spikes in traffic, making this test less useful.
+
+- Scalability Testing
+> Determines if the software is handling increasing loads at a steady pace.
+
+This test would simulate a more realistic scenario for a community platform, since the platform would grow over time and more users would interact with the platform. Unlike the other ones, which talk about a sudden spike or a large volume of users. With a test like this the scalability of the application can be tested and monitored to see whether the system correctly scales with the growth of the platform.
+
+- Volume Testing
+> Also known as flood testing because it involves following the system with data to check if it can be overwhelmed at any point and what fail-safes are necessary.
+
+This test looks at the system being overwhelmed with data instead of users. Due to the nature of my version of a community platform, with larger texts being written in the form of articles/tutorials/guides, this test will not do the testing that is needed.
 
 ### Conclusion on Testing Methodologies
 
-Meaning, when the individual parts of the application aren't too complex with many steps, integration testing will suffice. Since there aren't many steps in the overall process, it will be easier to find the source of the error if one does arise.
+In conclusion, after examining various testing methods for microservices, I have been able to make a selection of some methods which seem to be most beneficial for my coffee-based community platform.
 
-When the application has grown more complex features and logic, it may be worth to write seperate tests for those individual sections. That way, you have more control over the tests and can pinpoint the source of the error more easily.
+Unit testing will be used to ensure the smallest parts of the code function correctly.
+Integration testing will verify that different components, such as data stores and services, interact properly. 
+Component testing will check the behavior of entire microservices in isolation. 
+
+For performance testing, load testing and scalability testing will be employed to evaluate how the platform performs under different user loads and as the community grows. 
+I have selected these methods after considering the nature of the platform and the expected user interactions.
 
 ### DOT Framework for Testing
 
@@ -75,51 +124,80 @@ I've looked into implementations of the test methods to prepare my own tests. Th
 
 ### References for Testing
 
-- [Testing microservices](https://www.zartis.com/testing-microservices/)
-- [Writing tests for microservices](https://livebook.manning.com/book/microservices-in-net-core/chapter-7/)
-- [Reddit - Integration test Vs System Test](https://www.reddit.com/r/embedded/comments/14lhaq8/integration_test_vs_system_test/)
-
-*Testing implementation references:*
-
-- [Microsoft - Integration tests in ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-8.0)
-- [LinkedIn - Integration Test for Asp.Net Core API with Entity Framework using Testcontainers](https://www.linkedin.com/pulse/integration-test-aspnet-core-api-entity-framework-using-sarker/)
-- [Youtube - ASP.NET Core Integration Testing Tutorial](https://www.youtube.com/watch?v=RXSPCIrrjHc)
+- [1] Kong. (z.d.). How to Test Microservices: Strategy and Use Cases. Kong Inc. https://konghq.com/blog/learning-center/microservices-testing-guide
+- [2] Bose, S. (2022, 23 juli). What is Performance Testing : Detailed Guide | BrowserStack. BrowserStack. https://www.browserstack.com/guide/performance-testing
 
 ## How can automated code analysis frameworks streamline the testing process and enhance the efficiency of development iterations?
 
-Code analysis tools are used to analyze the codebase of a software project. They check for different things such as code quality, security vulnerabilities, and performance issues. So just because your unit/integration tests have passed, doesn't mean your code doesn't contain any issues.
+Code Analysis is a technique that is mentioned in various articles and blogs, but before I can determine how it can help my project, I need to understand what it is. According to this paper [[3]](#references-for-automated-code-analysis):
 
-### Automated Code Analysis
+> Static code analysis is a technique used to analyze source code without executing it. It involves examining the code for potential defects, security vulnerabilities, coding style violations, and other issues using automated tools.
 
-Automated code analysis tools can help streamline the testing process and enhance the efficiency of development iterations. These tools can be used to check for various issues in the codebase, such as:
+The paper goes on to give pros and cons of static code analysis:
 
-Code reliability
-: The tool can check for issues that might cause the code to behave unexpectedly.
+| Benefits                                                                                                                                                | Limitations                                                                                                                                  |
+|---------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| **Early defect detection:** Static code analysis identifies issues during the development phase, preventing them from propagating to downstream stages. | **False positives:** Static analysis tools may produce false positives, flagging code as problematic when it is not.                         |
+| **Consistency:** It helps enforce coding standards and best practices across the codebase, improving maintainability and readability.                   | **Limited scope:** Static analysis cannot detect runtime errors or issues related to system interactions, which may require dynamic testing. |
+| **Automation:** Static analysis tools can be integrated into CI/CD pipelines, automating the process of code review and defect detection.               | **Setup and configuration:** Configuring static analysis tools and interpreting their results may require expertise and effort.              |
 
-Code security
-: The tool can check for security vulnerabilities in the codebase.
+Look at these benefits and limitations, the value that it can give you and your project, by detecting potential issues early in your code and notifying you, outweighs the limitations that come with it. When it flags issues, someone is going to have to take a look at it in order for it to be fixed, so if during that process it turns out to be a false positive, it's not a big deal.
 
-Code maintainability
-: The tool can check for issues that might make the code hard to maintain.
+and one of the limitations being `Static analysis cannot detect runtime errors or issues related to system interactions, which may require dynamic testing.`. This is where the other testing methods come in, such as integration testing. These methods can be used in conjunction with each other to make sure the code is working as expected. Therefore, the limitations of static code analysis are mitigated whe used in conjunction with other processes.
 
-### Added value
+### Importance of Automated Code Analysis
 
-These tools bring the added value of preventing issues from happening in the first place. By analyzing the code and marking sections that might prove problematic, you can fix these issues before they cause a real problem in the application.
+One of the questions that comes up when looking into code analysis is why it's important/needed. According to Codium.ai [[4]](#references-for-automated-code-analysis), there's several reasons why code analysis is important:
 
-This in turn can save you time and money, since fixing issues after they've been deployed can be more costly than fixing them before they've been deployed. That is because you might have to do some debugging later on to find the source of the issue and then fix it, which is precious time that could've been spent on further development of the application.
+- **Improve code quality:** Code analysis may assist in detecting coding flaws, performance concerns, and other issues that might lead to software failures, making it simpler to maintain and improve the code over time.
+- **Satisfy compliance requirements:** Several businesses and government laws need certain security criteria to be met, and doing code analysis may assist in ensuring that the program fulfills those standards.
+- **Improve productivity:** By detecting possible problems early in the development process, code analysis may assist in decreasing the time and effort required for testing and debugging, resulting in higher productivity and a shorter time-to-market.
+
+So not only may it help with complying with governmental laws and standards, it may also help with improving the productivity of the development team. By detecting possible problems early in the development process, it may assist in decreasing the time and effort required for testing and debugging, resulting in higher productivity.
 
 ### Analysis Tools
 
-There are various code analysis tools that can be used to analyze the codebase of a software project. However the most used and known tools are:
+When looking into code analysis tools, some are mentioned more frequently than others. Codium.ai mentions the following tools [[4]](#references-for-automated-code-analysis):
 
-- SonarQube (SonarCloud)
-- Qodana (Jetbrains)
+- SonarQube [[5]](#references-for-automated-code-analysis)
+> an open-source tool for code quality and security analysis that supports a wide range of programming languages such as Java, C#, Python, JavaScript, and others.
 
-These tools mostly perform the same tasks, but they might have some differences in their pricing policies and installation processes.
+| Pros   	                 | Cons   	                                        |
+|--------------------------|-------------------------------------------------|
+| Wide array of languages	 | Has to be integrated with on-premise solutions	 |
+| Has a free tier to use	  | Has been reported to have not so ideal UI	      |
+
+SonarQube like mentioned, has to be integrated with on-premise solutions, which might bring extra work with it. It also has a cloud version called SonarCloud, which is easier to set up and use.
+
+- ESLint [[6]](#references-for-automated-code-analysis)
+> is a free and open-source tool for detecting and reporting patterns in ECMAScript/JavaScript code.
+
+| Pros   	                                                 | Cons   	                                                     |
+|----------------------------------------------------------|--------------------------------------------------------------|
+| Easy to install into projects                            | No support for other languages beside ECMAScript/JavaScript	 |
+| Focusses on Javascript so it's specialized for that code | 	                                                            |
+| It's free to use	                                        | 	                                                            |
+ | Can be run in editor but also in CI/CD pipelines	        | 	                                                            |
+
+Because it only focusses on Javascript, it's specialized for that code, since my frontend is built in React, this tool might be useful for that part of the codebase.
+
+- ReSharper
+
+ReSharper is a tool by Jetbrains, but it only focusses on .Net languages. Jetbrains also has a different tool called Qodana [[7]](#references-for-automated-code-analysis), which is a code analysis tool that supports multiple languages.
+
+| Pros   	                | Cons   	                                |
+|-------------------------|-----------------------------------------|
+| Has a free tier         | Limited language support for free tier	 |
+| IDE integration support | No frameworks support	                  |
+| Quickfixes              | No security analysis	                   |
+
+Qodana has some good features, although the free tier has some limitations that the other tools don't have. It also doesn't have security analysis, which is a big part of code analysis. it also has very limited langague support for the free tier.
 
 ### Conclusion on Automated Code Analysis
 
-I decided to use [SonarCloud](https://www.sonarsource.com/products/sonarcloud/) for the automated code analysis of my application, since it has a generous free-tier which gives you the ability to test features out. It also has a cloud version which is very easy to set up and use. At my scope, it didn't matter much which one I chose, since they all perform the same tasks, but at a larger scale,a deeper analysis of the tools might be needed.
+So I looked into why code analysis would be helpful for my project, and found that it may help with issues like improving code quality, satisfying compliance requirements and improving productivity. 
+
+I also looked into some tools that can be used for code analysis, such as SonarQube, ESLint, and Qodana. I decided to use ESLint for the frontend part of my codebase, it being supported in editors makes it very handy to have since it'll give you feedback on your code as you write it. For the rest of my codebase, I'll be using SonarCloud, since it has a wide range of languages it supports, has a free tier to use and is cloud-based.
 
 ### DOT Framework for Automated Code Analysis
 
@@ -128,9 +206,11 @@ I decided to use [SonarCloud](https://www.sonarsource.com/products/sonarcloud/) 
 I've looked into tools and platforms that may help me with automated code analysis. This involves researching and referencing various resources such as articles, blogs, and tutorials on SonarQube, Qodana, etc.
 
 ### References for Automated Code Analysis
-- [OWASP - Static Code Analysis](https://owasp.org/www-community/controls/Static_Code_Analysis)
-- [Static Code Analysis: Everything You Need to Know](https://blog.codacy.com/static-code-analysis)
-- [Qodana](https://www.jetbrains.com/qodana/)
+- [3] Frank, L. F., & Mohamed, S. M. (2024, april). Enhancing Software Development Efficiency: CI/CD Pipelines with Real-Time Defect Detection. Researchgate. https://www.researchgate.net/publication/380288596_Enhancing_Software_Development_Efficiency_CICD_Pipelines_with_Real-Time_Defect_Detection
+- [4] CodiumAI. (2023, 6 juli). What is Code Analysis. https://www.codium.ai/glossary/code-analysis/
+- [5] Sonar. (z.d.-b). Code Quality Tool & Secure Analysis with SonarQube. https://www.sonarsource.com/products/sonarqube/
+- [6] Find and fix problems in your JavaScript code - ESLint - Pluggable JavaScript Linter. (2024, 9 mei). https://eslint.org/
+- [7] Qodana: Static Code Analysis Tool by JetBrains. (2021, 21 oktober). JetBrains. https://www.jetbrains.com/qodana/
 
 ## What monitoring techniques should be implemented to detect potential issues in the platform?
 
