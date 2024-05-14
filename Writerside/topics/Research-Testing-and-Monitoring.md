@@ -28,7 +28,8 @@ They talk about the *given* element being anything that your unit may need in or
 
 If this scope were to be visualized, it would look like this:
 
-![unit-test-area_light.png](unit-test-area_light.png)
+![unit-test-area.png](unit-test-area.png)
+
 *A diagram highlighting in red the scope of unit testing in a system.*
 
 If a unit test only tests the smallest piece of ones code, it would only encompass one layer of the application, in this case, the service layer.
@@ -40,7 +41,8 @@ As for integration tests, Konghq.com describes them as:
 
 This shows that the scope of the test is being widened, since it's not only testing the smallest piece of code, but also the interaction between different pieces of code. What the actual services are, can be different as mentioned in the quote, it can be a data store, file system or other services.
 
-![integration-test-area_light.png](integration-test-area_light.png)
+![integration-test-area.png](integration-test-area.png)
+
 *A diagram highlighting in red the scope of integration testing in a system.*
 
 If an integration test tests the interaction between different pieces of code, it would encompass multiple layers of the application, in this case, the service layer and the data access layer.
@@ -58,7 +60,8 @@ This gives a clear definition of what a `component` is, since it could be interp
 
 This would add the entrypoint layer to the scope of the test, meaning sending a request to the controller methods and checking the response sent back.
 
-![component-test-area_light](component-test-area_light.png)
+![component-test-area](component-test-area.png)
+
 *A diagram highlighting in red the scope of component testing in a system.*
 
 This would be the final layer of tests that deal with one microservice in isolation.
