@@ -215,58 +215,97 @@ I've looked into tools and platforms that may help me with automated code analys
 - [6] Find and fix problems in your JavaScript code - ESLint - Pluggable JavaScript Linter. (2024, 9 mei). https://eslint.org/
 - [7] Qodana: Static Code Analysis Tool by JetBrains. (2021, 21 oktober). JetBrains. https://www.jetbrains.com/qodana/
 
-## What monitoring techniques should be implemented to detect potential issues in the platform?
+## Which monitoring platform can be integrated to detect potential issues in the community platform?
 
-Monitoring is the process of observing and checking various aspects of a system. Since a microservice consists of multiple smaller systems working together, it's important to make sure all running systems are working as expected.
+Monitoring is described by kubernetes.io [[8]](#references-for-monitoring) as:
+
+> To scale an application and provide a reliable service, you need to understand how the application behaves when it is deployed. You can examine application performance in a Kubernetes cluster by examining the containers, pods, services, and the characteristics of the overall cluster.
+
+This can be used to keep an eye on your application and see how it performs, and it's health. This could help detect any anomalies in the system, because of which I can take action if needed.
 
 ### Metrics
 
-Metrics are aspects of a system that can be measured. They can tell us something about the state of the system, how it's performing and any abnormalities that might be present.
+When looking for which resource metrics are important and need monitoring, kubernetes.io [[9]](#references-for-monitoring) mentions the following:
 
-Some metrics that can be measured in a microservice architecture include:
+- CPU
+> CPU is reported as the average core usage measured in cpu units. One cpu, in Kubernetes, is equivalent to 1 vCPU/Core for cloud providers, and 1 hyper-thread on bare-metal Intel processors.
 
-Response time
-: The time it takes for a request to be processed, this can tell us something about the system's performance.
+- Memory
+> Memory is reported as the working set, measured in bytes, at the instant the metric was collected.
 
-Error metrics
-: The number of errors that occur in the system, this can be helpful in detecting issues.
-
-Request volume
-: The number of requests that are being made to the system, you can identify spikes in traffic and adjust resources as needed.
-
-And there are more metrics that can be measured, depending on the system and what you want to know about it.
+This gives me an idea of which metrics a monitoring tool should be able to measure and visualize. Next to these metrics, I would also like to measure application-specific metrics, like inbound traffic, response time, and error rates.
 
 ### Monitoring Tools
 
-There are various tools that can be used to monitor a system. Some of the most used tools include:
+I found this clear article which gives some examples of monitoring tools that can be used for monitoring a kubernetes deployment [[10]](#references-for-monitoring). It's quite a bulky list, so I looked at the first bunch of tools. The ones that stood out to me were:
 
-- Prometheus
-- Grafana
-- Datadog
+#### Helios
 
-And ofcourse many more. These tools can be used to collect metrics from the system and display them in a way that's easy to understand. This can help you detect issues in the system and take action before they become a problem.
+The Helios site [[11]](#references-for-monitoring) says Helios is a minotoring tool/observability platform designed for distributed systems. The site also shows that it supports kubernetes, specifically.
 
-All of these tools provide monitoring features, although there is a difference in their pricing policies and installation processes.
+Here are some of the pros and cons of Helios:
 
 
-|              | Grafana          | Prometheus | Datadog          |
-|--------------|------------------|------------|------------------|
-| Pricing      | Free tier + paid | /          | Free tier + paid |
-| Installation | Cloud + local    | Local      | Local            |
+| Pros                                                                 | Cons                                                                                |
+|----------------------------------------------------------------------|-------------------------------------------------------------------------------------|
+| E2E microservices visibility                                         | The docs page is inactive, so can't look into, for example the installation process |
+| Collects all interactions, including HTTP and messaging payload data |                                                                                     |
+| Easy installation                                                    |                                                                                     |
 {style="both"}
+
+Even though Helios seems like a great option, it's Docs page is inactive so I can't look into the installation process, or any other in depth information about the tool.
+
+#### New Relic
+
+The New Relic website ([newrelic.com](https://www.newrelic.com)) describes the tool as `All-in-one observability`. It says the tool will help developers `monitor, debug, and improve their entire stack`.
+
+Let's look at some pros and cons of the tool:
+
+| Pros                                           | Cons                                                                          |
+|------------------------------------------------|-------------------------------------------------------------------------------|
+| Lot's of integrations                          | Because of the different ways to install, the doc pages can be very cluttered |
+| Tracks cluster resources (CPU/Memory) and more |                                                                               |
+| Guided installation                            |                                                                               |
+
+The kubernetes page of the New Relic website [[12]](#references-for-monitoring) gives a list of metrics it tracks, like:
+
+- resources used
+- number of K8s objects
+- namespaces per cluster
+- pods by namespace
+- container cpu usage
+- container restarts
+- missing pods by deployment
+- node resource consumption, and more
+
+This makes New Relic a very good option for monitoring my kubernetes deployment. It monitors a lot of things and the installation seems easy to do.
+
+#### Grafana
+
+The Grafana website ([grafana.com](https://grafana.com)) describes the tool as `The open observability platform`, it also mentions Kubernetes observability.
+
+Here are some pros and cons of Grafana:
+
+| Pros                                         | Cons                                                 |
+|----------------------------------------------|------------------------------------------------------|
+| Generous free tier                           | It has a lot of features, can get lost in navigation |
+| It has both a cloud and self-hosted solution |                                                      |
+| Extensive documentation                      |                                                      |
 
 ### Conclusion on Monitoring
 
-I decided to use [Grafana](https://grafana.com/) for the monitoring of my application, since it has a generous free-tier which gives you the ability to test features out. It also, unlike the others, has a cloud version which is easier to set up and use.
+I looked through some monitoring tools and compared them to find a good fit for my project. They all seemed promising, but I decided to first try out New Relic. It tracks lots of integrations and the installation seems easy to do. If New Relic doesn't work out, I have chosen Grafana as a fallback option, since that one also seems to be a good fit for my project.
 
-Although, there is no right or wrong answer when it comes to monitoring tools, since they all perform more or less the same purpose. It's important to take a look at the project you work and see whether you have the need for a very specific feature and look for a tool that provides that.
 
 ### DOT Framework for Monitoring
 
 **Best good and bad practices:**
 
-I've explored various monitoring tools such as Prometheus, Grafana, etc. I've evaluated their use and relevancy in my context and app structure. This involves understanding the pricing policies and installation processes of each tool.
+I've explored various monitoring tools such as Helios, Grafana, etc. I've evaluated their use and relevancy in my context and app structure. This involves understanding the pricing policies and installation processes of each tool.
 
 ### References for Monitoring
-- [Microservices Monitoring and Observability in Depth](https://medium.com/cloud-native-daily/microservices-monitoring-and-observability-in-depth-d40aa0795dd3)
-- [HOW TO CHOOSE A MICROSERVICES MONITORING TOOL](https://redis.io/blog/choose-microservice-monitoring-tool/)
+- [8] Tools for Monitoring Resources. (2024, 19 maart). Kubernetes. https://kubernetes.io/docs/tasks/debug/debug-cluster/resource-usage-monitoring/
+- [9] Resource metrics pipeline. (2023, 2 augustus). Kubernetes. https://kubernetes.io/docs/tasks/debug/debug-cluster/resource-metrics-pipeline/
+- [10] Prabhanga, B. (2023, 4 juli). Top 10 Kubernetes Monitoring Tools | Cloud Native Daily. Medium. https://medium.com/cloud-native-daily/kubernetes-monitoring-tools-584d82c94185
+- [11] Gethelios. (2024, 17 januari). Applied observability platform that provides actionable security and observability insights. gethelios.dev. https://gethelios.dev/
+- [12] Kubernetes. (z.d.). New Relic. https://newrelic.com/instant-observability/kubernetes
