@@ -21,4 +21,5 @@
     <toc-element topic="Netlab.md"/>
     <toc-element topic="Research-Testing-and-Monitoring.md"/>
     <toc-element topic="GDPR.md"/>
+    <toc-element topic="Testreport.md"/>
 </instance-profile>
