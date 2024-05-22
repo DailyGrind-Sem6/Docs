@@ -148,7 +148,7 @@ Here it talks about the need to notify your users when a data leak occurs. It me
 
 > You have to report every serious data leak to the DPA. Also, you must record and document every data leak in your organisation, even the internal ones that you do not have to report. View the guidelines to find out which data leaks to report. These guidelines have not been made final. You only have to notify the persons whose data are involved in the data leak, if it has serious consequences for their rights and freedoms.
 
-This just means that you have to keep track of all data leaks, even if it is just an internal one, that does not require reporting.
+This just means that you have to keep track of all data leaks, even if it is just an internal one, that does not require reporting. And when a leak does occur, you have to notify the persons whose data are involved in the data leak.
 
 This is also something to keep in mind for the future. The application currently stores the user's email address and password, which is sensitive data, although the other data is just the articles and/or comments that the user has created.
 
