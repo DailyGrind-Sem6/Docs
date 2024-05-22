@@ -124,3 +124,47 @@ jobs:
       - name: Apply Service manifest
         run: sudo k3s kubectl apply -f ${{ env.SERVICE_MANIFEST_PATH }}
 ```
+
+## Loadbalancer
+
+After all deployments are done, I installed a loadbalancer in my cluster which will balance the load between the different services. Usually cloud platforms like Azure or AWS provide a loadbalancer, but since I'm using Netlab, I have to install one myself. One that's used a lot is Metallb. You can install Metallb using the following command:
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.5/config/manifests/metallb-native.yaml
+```
+
+After installing Metallb, you need to create a configmap to configure the IP range that Metallb can use. It will use this IP range to allocate IP addresses to deployments of type `Loadbalancer`. You can create a configmap that looks like this:
+
+```yaml
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: first-pool
+  namespace: metallb-system
+spec:
+  addresses:
+  - 192.168.144.150-192.168.144.200
+```
+
+After that, I created an `L2Advertisement`. In L2 mode, only one node is elected to announce the IP from. This is what the configmap looks like:
+
+```yaml
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: homelab-l2
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - first-pool
+```
+
+After deploying the resources, all services of type `Loadbalancer` will get an IP address from the range specified in the `IPAddressPool` configmap.
+
+When checking the services again, you should see that the external IP is now an IP address from the range specified in the `IPAddressPool` configmap:
+
+```bash
+NAME            TYPE           CLUSTER-IP      EXTERNAL-IP         PORT(S)          AGE
+api-gateway     Loadbalancer   10.43.43.95     192.168.144.150     8080:31285/TCP   14d
+frontend        Loadbalancer   10.43.19.201    192.168.144.151     3000:32570/TCP   14d
+```
