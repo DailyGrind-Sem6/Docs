@@ -63,6 +63,24 @@ Results:
 | Posts Count	          | 1	                                     | 1	                                     |
 | Post dummy Title      | `f5808aaa-823e-4c5d-8983-ed6fc7f26344` | `f5808aaa-823e-4c5d-8983-ed6fc7f26344` |
 
+**Test Case 3: Verify GetByID Endpoint**
+
+Objective: Verify that the GetByID endpoint returns the correct post given the ID.
+
+Preconditions: The database contains a post with the specified ID.
+
+Steps:
+1. Create a post to populate the database.
+2. Call the GetByID endpoint with the post's ID.
+
+Results:
+
+|                      | Expected result            | Actual result              |
+|----------------------|----------------------------|----------------------------|
+| Statuscode           | `200`                      | `200`                      |
+| Headers Content-Type | `application/json`         | `application/json`         |
+| Post ID              | `664e524fa84abaa969666a1e` | `664e524fa84abaa969666a1e` |
+
 ### Load Testing
 
 Load testing is used to determine how the system behaves under various loads. It helps identify bottlenecks and performance issues that may arise when the system is under stress.
