@@ -120,3 +120,134 @@ post-service   Deployment/post-service   6%/50%    1         10        1        
 api-gateway    Deployment/api-gateway    1%/50%    1         10        1          143m
 post-service   Deployment/post-service   1%/50%    1         10        1          132m
 ```
+
+## Artillery.io Load Testing (CI/CD)
+
+Currently in my CI/CD pipeline, I have a job that runs a load test using Artillery.io. The load test hits the endpoints in the API Gateway, which is the entry point to the microservices. All I needed to do, besides create the workflow for the load test, is create a config file for Artillery, describing how many users it needs to generate, which endpoints to hit, for how long and more.
+
+This is what a simple Artillery config file looks like:
+
+```yaml
+config:
+  target: 'http://192.168.144.150:8080/api'
+  phases:
+    - duration: 30
+      arrivalRate: 100
+  ensure:
+    maxErrorRate: 1
+    max: 500
+scenarios:
+  - name: 'Get a list of posts'
+    flow:
+      - get:
+          url: '/posts'
+          expect:
+            - statusCode: 200
+```
+
+The logs in Github Actions will output a URL to a dashboard in Artillery.io where you can see the results of the load test. This is a great way to monitor the performance of the application over time:
+
+```Bash
+Test run id: trzxe_njcjrn8n6cky3rfp8e5wzngmwd9dj_ntnh
+Artillery Cloud reporting is configured for this test run
+Run URL: https://app.artillery.io/load-tests/trzxe_njcjrn8n6cky3rfp8e5wzngmwd9dj_ntnh
+Phase started: unnamed (index: 0, duration: 30s) 17:24:48(+0200)
+```
+
+The dashboard will display various metrics such as the number of requests, the response time, the number of errors and more. it will also generate interactive graphs which can be used to analyze the performance of the application, this is such a graph:
+
+![artillery_loadtest_1.png](Artillery_Loadtest_1.png)
+
+## Spawning replicas under load
+
+### Installing Metrics Server
+
+In order to scale my application under load, a couple things need to be setup. First, a metrics-server needs to be installed in the cluster. In minikube this can be done using the following command:
+
+```Bash
+minikube addons enable metrics-server
+```
+
+In a production environment, the metrics-server can be installed in various ways, although I used Manifests to install it in my k3s cluster. The metrics-server will collect metrics from the pods in the cluster and make them available to the Horizontal Pod Autoscaler (HPA).
+
+Installing a metrics-server in k3s can be done using the following command:
+
+```Bash
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+```
+
+### Resource limits
+
+After the metrics-server is installed, a small change needs to be made to the existing deployment files. A `resources` section needs to be added and include the following:
+
+```yaml
+spec:
+  containers:
+    - image: tendeza/sem6-post-service:latest
+      name: post-service
+      ports:
+        - containerPort: 8081
+      resources:
+        limits:
+            cpu: "1000m"
+            memory: "1000Mi"
+```
+
+This gives a resource limit to the pod, which is needed for the HPA to keep track of which percentage of the CPU is being used.
+
+### Creating the HPA
+
+After that change is made, the HPA can be created. The HPA will automatically scale the number of pods based on the CPU usage of the pods. I created an HPA for the api-gateway and post-service deployments. The HPAs were configured to maintain a CPU utilization of 25%. It could scale the number of pods between 1 and 10 based on the CPU usage.
+
+This is how the HPA for the api-gateway deployment looks like:
+
+```yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: api-gateway-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: api-gateway
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 25
+```
+
+After creating the file it can be applied to the cluster like every other Kubernetes resource using `kubectl apply -f hpa.yaml`.
+
+### Monitoring the HPA
+
+To check whether everything was created correctly and the HPA is working, the status of the HPA can be checked using the following command:
+
+```Bash
+kubectl get hpa
+```
+
+This should output your HPA and under `TARGETS` it should show the current CPU utilization and the target CPU utilization, instead of `unknown`.
+
+### Load testing
+
+When running a load test on the application, the HPA should automatically scale the number of pods based on the CPU usage of the pods. This can be monitored using the `kubectl get hpa --watch` command.
+
+```Bash
+NAME               REFERENCE                 TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+api-gateway-hpa    Deployment/api-gateway    1%/25%    1         10        1          7m19s
+api-gateway-hpa    Deployment/api-gateway    10%/25%   1         10        1          8m19s
+post-service-hpa   Deployment/post-service   10%/5%    1         10        1          8m19s
+post-service-hpa   Deployment/post-service   10%/5%    1         10        2          8m34s
+api-gateway-hpa    Deployment/api-gateway    4%/25%    1         10        1          9m19s
+post-service-hpa   Deployment/post-service   5%/5%     1         10        2          9m19s
+```
+
+To test the spawning of the replicas, I lowered the maximum CPU usage to `5%`, so that the application would scale quicker. 
+
+The above output shows that the CPU utilization of the post-service deployment increased to `10%`, which was enough to trigger the autoscaler to scale up the number of pods to 2. This shows that the HPA is working correctly and the application is scaling as expected.
