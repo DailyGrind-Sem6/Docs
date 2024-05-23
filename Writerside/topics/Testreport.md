@@ -29,7 +29,7 @@ The following test cases were created to test the endpoints within the Post Serv
 
 Objective: Verify that the GetAll endpoint returns all the items in the database.
 
-Preconditions: The database contains items.
+Endpoint: `GET /api/posts`
 
 Steps:
 1. Post items to the database.
@@ -45,7 +45,12 @@ Results:
 
 **Test Case 2: Verify CreatePost Endpoint**
 
-Objective: Verify that the CreatePost endpoint adds a new post to the database.
+Endpoint: `POST /api/posts`
+
+Body:
+- Title - `string`
+- Content - `string`
+- UserId - `string`
 
 Preconditions: The database is empty.
 
@@ -67,7 +72,7 @@ Results:
 
 Objective: Verify that the GetByID endpoint returns the correct post given the ID.
 
-Preconditions: The database contains a post with the specified ID.
+Endpoint: `GET /api/posts/{id}`
 
 Steps:
 1. Create a post to populate the database.
@@ -80,6 +85,45 @@ Results:
 | Statuscode           | `200`                      | `200`                      |
 | Headers Content-Type | `application/json`         | `application/json`         |
 | Post ID              | `664e524fa84abaa969666a1e` | `664e524fa84abaa969666a1e` |
+
+**Test Case 4: Verify Remove Endpoint**
+
+Objective: Verify that the Remove endpoint removes the post with the specified ID.
+
+Endpoint: `DELETE /api/posts/{id}`
+
+Steps:
+1. Create a post to populate the database.
+2. Call the Remove endpoint with the post's ID.
+
+Results:
+
+|                      | Expected result | Actual result |
+|----------------------|-----------------|---------------|
+| Statuscode           | `NotFound`      | `NotFound`    |
+
+**Test Case 5: Verify Update Endpoint**
+
+Objective: Verify that the Update endpoint updates the post with the specified ID.
+
+Endpoint: `PUT /api/posts/{id}`
+
+Body:
+
+- Title - `string`
+- Content - `string`
+
+Steps:
+1. Create a post to populate the database.
+2. Call the Update endpoint with the post's ID and a new object.
+
+Results:
+
+|            | Expected result | Actual result   |
+|------------|-----------------|-----------------|
+| Statuscode | `200`           | `200`           |
+| New title  | `Updated Title` | `Updated Title` |
+
 
 ### Load Testing
 
