@@ -19,8 +19,9 @@ API Gateway
 Post Service
 : The Post Service is an ASP.Net Core application that provides an API for creating and retrieving posts.
 
-Posts Database
-: The Posts Database is a MongoDB database that stores the posts created by users.
+Comment Service
+: The Comment Service is an ASP.Net Core application that provides an API for creating and retrieving comments.
+
 
 ## Creating Dockerfiles
 
@@ -127,86 +128,98 @@ Here is the docker-compose.yml file:
 ```yaml
 version: '3'
 services:
-   zookeeper:
-      container_name: zookeeper
-      image: 'confluentinc/cp-zookeeper:latest'
-      environment:
-         ZOOKEEPER_CLIENT_PORT: 2181
-         ZOOKEEPER_TICK_TIME: 2000
-      ports:
-         - '2181:2181'
-      networks:
-         - backend
+  zookeeper:
+    container_name: zookeeper
+    image: 'confluentinc/cp-zookeeper:latest'
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - '2181:2181'
+    networks:
+      - backend
 
-   kafka:
-      container_name: kafka
-      image: 'confluentinc/cp-kafka:latest'
-      depends_on:
-         - zookeeper
-      ports:
-         - '9092:9092'
-         - '29092:29092'
-      environment:
-         KAFKA_BROKER_ID: 1
-         KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-         KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092'
-         KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
-         KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-         KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      networks:
-         - backend
+  kafka:
+    container_name: kafka
+    image: 'confluentinc/cp-kafka:latest'
+    depends_on:
+      - zookeeper
+    ports:
+      - '9092:9092'
+      - '29092:29092'
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - backend
 
-   frontend:
-      container_name: frontend
-      build:
-         context: ./Frontend
-         dockerfile: Dockerfile
-      ports:
-         - '3000:3000'
-      depends_on:
-         - api-gateway
-      networks:
-         - backend
+  frontend:
+    container_name: frontend
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      - api-gateway
+    networks:
+      - backend
 
-   api-gateway:
-      container_name: api-gateway
-      build:
-         context: ./API-Gateway
-         dockerfile: ./API-Gateway/Dockerfile
-      ports:
-         - '8080:8080'
-      depends_on:
-         - kafka
-      networks:
-         - backend
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: ./API-Gateway
+      dockerfile: ./API-Gateway/Dockerfile
+    ports:
+      - '8080:8080'
+    depends_on:
+      - kafka
+    networks:
+      - backend
 
-   post-service:
-      container_name: post-service
-      build:
-         context: ./Post-Service
-         dockerfile: ./Post-Service/Dockerfile
-      ports:
-         - '8081:8081'
-      depends_on:
-         - kafka
-      networks:
-         - backend
-   postdb:
-     container_name: postdb
-     image: mongo:latest
-     environment:
-       MONGO_INITDB_ROOT_USERNAME: root
-       MONGO_INITDB_ROOT_PASSWORD: root
-     volumes:
-       - mongodb_data:/data/db
-     ports:
-       - '27017:27017'
-     networks:
-       - backend
+  post-service:
+    container_name: post-service
+    build:
+      context: ./Post-Service
+      dockerfile: ./Post-Service/Dockerfile
+    ports:
+      - '8081:8081'
+    depends_on:
+      - kafka
+    networks:
+      - backend
+
+  comment-service:
+    container_name: comment-service
+    build:
+      context: ./Comment-Service
+      dockerfile: ./Comment-Service/Dockerfile
+    ports:
+      - '8082:8082'
+    depends_on:
+      - kafka
+    networks:
+      - backend
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - '27017:27017'
+    networks:
+      - backend
 
 networks:
-   backend:
-      name: backend
+  backend:
 
 volumes:
   mongodb_data:
@@ -225,13 +238,16 @@ frontend
 : This service depends on the api-gateway service. It builds from a Dockerfile located in the ./Frontend directory and is named frontend. It exposes port 3000 and is part of the backend network.
 
 api-gateway
-: This service depends on the kafka service. It builds from a Dockerfile located in the ./API-Gateway directory and is named api-gateway. It exposes port 8080 and is part of the backend network.
+: It builds from a Dockerfile located in the ./API-Gateway directory and is named api-gateway. It exposes port 8080 and is part of the backend network.
 
 post-service
-: This service depends on the kafka service. It builds from a Dockerfile located in the ./Post-Service directory and is named post-service. It exposes port 8081 and is part of the backend network.
+: It builds from a Dockerfile located in the ./Post-Service directory and is named post-service. It exposes port 8081 and is part of the backend network.
 
-postdb
-: This service uses the mongo:latest image and is named postdb. It exposes port 27017 and is part of the backend network. Several environment variables are set to configure MongoDB, and a volume is mounted to persist the data.
+comment-service
+: It builds from a Dockerfile located in the ./Comment-Service directory and is named comment-service. It exposes port 8082 and is part of the backend network.
+
+mongodb
+: This service uses the mongo:latest image and is named mongodb. It exposes port 27017 and is part of the backend network. Several environment variables are set to configure MongoDB, and a volume is mounted to persist the data.
 
 This file tells Docker to:
 - Build the image for each service using the Dockerfile in the specified location.
