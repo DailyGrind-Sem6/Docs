@@ -96,7 +96,7 @@ This means that my application is not vulnerable to injection attacks, as long a
 
 This shows that, were I to use the `$where` expression for example, my application would become vulnerable to injection attacks. Therefore, I avoid using these expressions in my application by making use of filters, like so:
 
-```csharp
+```C#
     var filter = Builders<Post>.Filter.Eq(post => post.Id, id);
     var result = _posts.Find(filter).SingleOrDefaultAsync();
 ```
@@ -141,7 +141,7 @@ The page mentions a few things that can cause security misconfigurations, like n
 
 My application has no default accounts, I also don't have any unused services or ports enabled. My error handling is set up to not reveal any sensitive information, but instead return a generic error message. I detect when something goes wrong and return a generic error message to the user:
 
-```csharp
+```C#
 if (post == null)
 {
     throw new Exception("Post not found");
