@@ -46,4 +46,12 @@
         <description>Created after removal of "API Reference" from DailyGrind</description>
         <accepts>API_Reference.html</accepts>
     </rule>
+    <rule id="ce22abb">
+        <description>Created after removal of "Owasp Top 10 Reasearch" from DailyGrind</description>
+        <accepts>Owasp-Top-10-Reasearch.html</accepts>
+    </rule>
+    <rule id="6b566e8e">
+        <description>Created after removal of "OWASP Top 10" from DailyGrind</description>
+        <accepts>OWASP-Top-10.html</accepts>
+    </rule>
 </rules>
