@@ -236,6 +236,21 @@ This risk is about an attacker editing, for instance, the URL of a request to ma
 
 Along with this, a proper CORS setup can prevent these attacks, by only allowing requests from trusted origins. This means that incoming requests can be assumed to be safe.
 
+## Conclusion
+
+In this document I went through all 10 of OWASP's top 10 security risks and checked if/how my application is vulnerable to them. Some of the risks are already mitigated by the tools I use, like Auth0 for various authentication risks and MongoDB for injection risks.
+
+For the risks that are not mitigated yet, I have noted possible fixes that I can implement in my application. These include:
+- setting up rate limiting and protected endpoints in the API-Gateway
+- using Dependabot to keep dependencies up-to-date
+- using the ZAP security scanner to scan the application for vulnerabilities
+- implement proper logging in order to detect breaches
+- use the OWASP Dependency Check to scan the application for known vulnerabilities in the dependencies used
+- set up mandatory code reviews to make sure no malicious code is being added to the application
+- set up a CORS policy to prevent SSRF attacks
+
+These changes would help make my application more secure by preventing the most common security risks. How many of these changes I will implement will depend on the time I have available and the importance of the risk.
+
 ## References
 - [1] OWASP Top Ten | OWASP Foundation. (z.d.). https://owasp.org/www-project-top-ten/
 - [2] Authentication — Ocelot 23.2 documentation. (z.d.). https://ocelot.readthedocs.io/en/latest/features/authentication.html#id2
