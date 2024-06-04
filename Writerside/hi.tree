@@ -21,6 +21,7 @@
     <toc-element topic="Auth0.md"/>
     <toc-element topic="Netlab.md"/>
     <toc-element topic="Research-Testing-and-Monitoring.md"/>
+    <toc-element topic="Research-Messaging.md"/>
     <toc-element topic="GDPR.md"/>
     <toc-element topic="OWASP-Top-10-Research.md"/>
     <toc-element topic="Testreport.md"/>
