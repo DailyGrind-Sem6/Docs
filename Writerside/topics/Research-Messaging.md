@@ -80,6 +80,14 @@ Kafka and RabbitMQ support various programming languages and protocols. Kafka is
 
 RabbitMQ supports a broader range of languages, including Java, Ruby, JavaScript, Go, C, Swift, Spring, Elixir, PHP, and .NET. It primarily uses the Advanced Message Queuing Protocol (AMQP) but also supports legacy protocols like STOMP and MQTT for message routing.
 
+### Conclusion on messaging brokers
+
+I looked at what a messaging broker is and what components it consists of. I found that a messaging broker is an intermediary program that applications and services use to communicate with each other to exchange information.
+
+I also looked at two messaging brokers that are available for microservices: RabbitMQ and Kafka. Even though they both have the same goal, they are a bit different in how they work, like some small differences in their architecture.
+
+I eventually decided to go with Kafka, because the difference in performance is negligible for my application. Kafka contains lots of resources online, as well as support for C#, which is the language I'm using for the backend. Kafka also has a lot of support for other languages, which is a good thing to have in case I want to use another language in the future.
+
 ## What are the different messaging patterns used in microservices and which one is applicable in my project?
 
 There are a bunch of different patterns available that can be used in messaging. I found a page on the Microsoft website which mentions some, I'll go through the most common ones [[3]](#references).
@@ -152,9 +160,65 @@ As shown in the diagram above, this pattern consists of multiple transactions th
 
 This is a pattern that could be handy in my application, in case of some data that needs to be consistent across multiple databases. Since there can be some data duplication in order to simplify some processes, this pattern can be used in order to ensure that the data is consistent across all databases. Not yet needed in my application, but possible that I'll need it in the future.
 
+### Conclusion on messaging patterns
+
+I went through some of the most common messaging patterns that are used in microservices and explained what they are and when they are used. I found out that I may very well need patterns like the `Publisher-Subscriber pattern` and the `Asynchronous Request-Reply pattern` in my application, because they're a simple way to implement communication between services.
+
+These patterns are all very useful in their own way, and can be very handy in a number of situations. But in the context of my community platform application, I won't need all of these patterns, like the `Competing Consumers pattern`, it's still good to know about them inc ase they're needed in another project.
+
+
 ## In which scenarios is the use of messaging warranted?
 
+So in my application, the services are divided by entity. That means that everything that has to do with a post (which can be a simple article, a guide, a question, etc.) is handled by a post-service. Everything that has to do with a comment is handled by a comment-service, etc.
+
+### Comment count
+
+In order to make retrieving data easier, I plan on keeping some data in the post database, that would otherwise need to be calculated with data from the comment database. I'm talking about keeping track of a `commentCount` in the post database, which would be the amount of comments that a post has. This can be a good indicator for a user to see the amount of engagement a post has.
+
+So for this feature, the publisher-subscriber pattern would be a fitting choice, because in order to update this `commentCount` in the post database, I would need to send a message on a topic like `comment-created` to the broker, which would then be received by the post-service. The post-service would then know to update the `commentCount` in the post database.
+
+What this would allow me to do is, in the future, if another process needs to be run when a comment is created, I can just add another subscriber to the `comment-created` topic. This way I can easily add more processes that need to be run when a comment is created, without having to change the comment-service.
+
+![comment-count-update-diagram.png](comment-count-update-diagram.png)
+
+The diagram above shows the flow of the `Publisher-Subscriber pattern` for the `comment-created` topic. It shows a publisher that publishes a message to the broker under the `comment-created` topic. Then, the post-service that is listening to that topic will receive the message and update the `commentCount` in the post database.
+
+### Check post existence
+
+Still talking about the comment-creation feature, another scenario where the use of a messaging pattern would be warranted is, before the comment is even created. When a user wants to create a comment, the comment-service needs to check if the post that the comment is supposed to be created under, actually exists.
+
+For this simple check the `asynchronous request-reply pattern` would be a fitting choice, because the comment-service would send a request to the post-service to check if the post exists. The post-service would then send a response back to the comment-service, which would then know if the post exists or not.
+
+> Although it's not recommended to use this pattern too much for microservice communication, since it couples microservices too much, for a simple check like this it would be a fitting choice.
+{style="warning"}
+
+![post-check-diagram.png](post-check-diagram.png)
+
+This diagram shows the simple flow of the comment-service sending a request to the post-service to check if a post exists. The post-service then sends a response back to the comment-service, which then knows if the post exists or not. If the post doesn't exist, the comment service can just return an error to the user.
+
+### Account deletion
+
+Another scenario where the use of a messaging pattern would be warranted is when a user wants to delete their account. When a user wants to delete their account, the account-service needs to delete all the data that is linked to that account. This includes all the posts, comments, etc. that the user has created.
+
+For this feature, the `publisher-subscriber pattern` would be a fitting choice, because when a user wants to delete their account, the account-service would send a message to the broker under a topic like `account-deleted`. Then, all the services that are listening to that topic would receive the message and delete all the data that is linked to that account or at the least, mark the user as `[deleted]` or something like that.
+
+![account-deletetion-diagram.png](account-deletetion-diagram.png)
+
+This diagram shows the flow of the `Publisher-Subscriber pattern` for the `account-deleted` topic. It shows the account-service that sends a message to the broker under the `account-deleted` topic. Then, all the services that are listening to that topic will receive the message and delete all the data that is linked to that account.
+
+### Conclusion on scenarios
+
+I went through some features/scenarios that are planned for the application and explained how the use of a messaging pattern would be warranted. I found that the `publisher-subscriber pattern` would be the most fitting choice for most of these features, because it allows for multiple processes to be run independently of each other when a certain event occurs.
+
+In some cases, the `asynchronous request-reply pattern` would be a fitting choice, like in the case of checking if a post exists before a comment is created. Although it's not recommended to use this pattern too much for microservice communication, since it couples microservices too much, for a simple check like this it would be a fitting choice.
+
 ## Conclusion
+
+I have looked at various things needed to establish communication between microservices using messaging. First I looked at what a messaging broker is and what components it consists of. I chose to use Kafka as the messaging broker for my application, because it has a lot of resources online, as well as support for C#, which is the language I'm using for the backend.
+
+Then I looked at some of the most common messaging patterns that are used in microservices and explained what they are and when they are used. I found out that I may very well need patterns like the `Publisher-Subscriber pattern` and the `Asynchronous Request-Reply pattern` in my application, because they're a simple way to implement communication between services.
+
+I then looked at some features where the use of a messaging pattern is needed. I found that the `publisher-subscriber pattern` would be the most fitting choice for most of these features, because it allows for multiple processes to be run independently of each other when a certain event occurs.
 
 ## References
 
