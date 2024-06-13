@@ -26,4 +26,5 @@
     <toc-element topic="OWASP-Top-10-Research.md"/>
     <toc-element topic="Testreport.md"/>
     <toc-element topic="Monitoring.md"/>
+    <toc-element topic="Security.md"/>
 </instance-profile>
