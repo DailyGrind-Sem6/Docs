@@ -27,4 +27,5 @@
     <toc-element topic="Testreport.md"/>
     <toc-element topic="Monitoring.md"/>
     <toc-element topic="Security.md"/>
+    <toc-element topic="Messaging.md"/>
 </instance-profile>
