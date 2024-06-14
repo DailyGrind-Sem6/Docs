@@ -48,6 +48,14 @@ public async Task SendMessage(string value, string topic)
 
 This method takes a value and a topic as parameters. The value is the message that will be sent to the messaging broker, and the topic is the topic on which the message will be sent. In this case, the topic is "comment-created".
 
+The container shows the logs of the Comment-Service, which shows that the message was sent to the messaging broker:
+
+```bash
+2024-06-14 18:02:17 Creating comment...
+2024-06-14 18:02:19 info: Comment_Service.Kafka.KafkaProducer[0]
+2024-06-14 18:02:19       Message sent to Kafka: 666c19f3e44ef35276703a56 - on topic: comment-created
+```
+
 ### Post-Service
 
 In the Post-Service, I added a new class called `KafkaCommentPostConsumer`. This class is responsible for listening to messages from the messaging broker for this specific topic. The method that listens to the messages looks as follows:
@@ -87,4 +95,17 @@ In the Post-Service, I added a new class called `KafkaCommentPostConsumer`. This
 
         return Task.CompletedTask;
     }
+```
+
+This method listens to messages from the messaging broker. When a message is received, it will call the `IncrementCommentCount` method on the `PostService`. This method will increment the comment count of the post with the given id.
+
+The container shows the logs of the Post-Service, which shows that the message was received from the messaging broker:
+
+```bash
+2024-06-14 18:02:22 info: Post_Service.Kafka.KafkaCommentPostConsumer[0]
+2024-06-14 18:02:22       Received message...
+2024-06-14 18:02:22 info: Post_Service.Kafka.KafkaCommentPostConsumer[0]
+2024-06-14 18:02:22       Updating CommentCount of post: 666c19f3e44ef35276703a56
+2024-06-14 18:02:22 info: Post_Service.Kafka.KafkaCommentPostConsumer[0]
+2024-06-14 18:02:22       Incremented CommentCount of post: 666c19f3e44ef35276703a56
 ```
