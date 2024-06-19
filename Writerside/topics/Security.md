@@ -2,6 +2,25 @@
 
 After I finished my research into security, I mentioned some actions that I can take to improve the overall security of my application. This document goes over all the steps I took to secure my application.
 
+## Task List
+
+| Task  	                                                                                                                                                                               | Going to do  	 | Notes  	                                            |
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------|-----------------------------------------------------|
+| Protected endpoints in the API-Gateway	                                                                                                                                               | 	V             | 	                                                   |
+| Using Dependabot to keep dependencies up-to-date	                                                                                                                                     | 	V             | 	                                                   |
+| Using the ZAP security scanner to scan the application for vulnerabilities	                                                                                                           | 	 V            | 	                                                   |
+| Where possible, implement multi-factor authentication to prevent automated credential stuffing, brute force, and stolen credential reuse attacks.                                     | 	 X            | 	                                                   |
+| Implement proper logging in order to detect breaches	                                                                                                                                 | 	 V            | A task that happens continuously	                   |
+| Implement weak password checks, such as testing new or changed passwords against the top 10,000 worst passwords list.	                                                                | 	 V            | Auth0 handles large part of the auth process	       |
+| Use the OWASP Dependency Check to scan the application for known vulnerabilities in the dependencies used	                                                                            | 	 X            | 	                                                   |
+| Set up mandatory code reviews to make sure no malicious code is being added to the application	                                                                                       | 	 X            | In a team this would be necessary	                  |
+| Set up a CORS policy to prevent SSRF attacks	                                                                                                                                         | 	   X          | 	                                                   |
+| Ensure that logs are generated in a format that log management solutions can easily consume.	                                                                                         | 	V             | Monitoring tools can access the container/pod logs	 |
+| Using the ZAP security scanner to scan the application for vulnerabilities	                                                                                                           | V	             | 	                                                   |
+| Write unit and integration tests to validate that all critical flows are resistant to the threat model. Compile use-cases and misuse-cases for each tier of your application.	        | 	V             | 	                                                   |
+| Limit resource consumption by user or service	                                                                                                                                        | 	V             | 	                                                   |
+
+
 ## Protected Routes
 
 One of the first things the OWASP Top 10 mentions is `broken access control`. This is when a user can access a resource that they shouldn't be able to access. To prevent this, I implemented protected routes. In the context of my project this would mean that a user can only access certain routes, if they are logged in. If they aren't logged in, the backend will return a 401 status code.
@@ -138,3 +157,15 @@ After enabling Dependabot, once in a while I will get an alert regarding a new v
 When I click on one of these alerts, it will show me details about the dependency and the new version.
 
 ![dependabot-alerts-details-example.png](dependabot-alerts-details-example.png)
+
+## Zap Scan
+
+Another action that came out of the research was to use OWASP ZAP scan. This is a tool that will scan your application for vulnerabilities. It's very easy to integrate into your CI/CD pipeline, with a template ready on the Github Actions marketplace.
+
+![github-actions-zap-scan.png](github-actions-zap-scan.png)
+
+After it is done scanning, it will create an issue with the issues it found. This is an example of what the issue looks like:
+
+![zap-scan-issue.png](zap-scan-issue.png)
+
+This issue shows a list of issues, for example missing `Content Security Policy` headers or `Anti-clickjacking` headers. Along with the static code analysis, this tool will help you find vulnerabilities in your application.
