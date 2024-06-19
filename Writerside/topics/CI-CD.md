@@ -19,6 +19,9 @@ Push_to_Dockerhub
 Deploy_to_Netlab
 : This job is responsible for deploying the application to the Netlab server, which is a test environment. This job is only executed if the Push_to_Dockerhub job is successful.
 
+ZAP_scan (Only present for Frontend)
+: This job is responsible for running the ZAP scan on the application, which checks for security vulnerabilities. This job is only executed if the Deploy_to_Netlab job is successful.
+
 Artillery (Only present for API-Gateway)
 : This job is responsible for running the artillery load tests on the application. This job is only executed if the Deploy_to_Netlab job is successful.
 
