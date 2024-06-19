@@ -16,6 +16,22 @@ Once the VM is set up, you can install K3s on the VM. K3s is a lightweight Kuber
 curl -sfL https://get.k3s.io | sh -
 ```
 
+The upper command will install K3s as a server. If you want to install K3s as an agent, you can use the following command:
+
+```bash
+curl -sfL https://get.k3s.io | K3S_URL=https://myserver:6443 K3S_TOKEN=mynodetoken sh -
+```
+
+Replace `myserver` with the IP address of your server node.
+
+To get the node token from your server node, you can use the following command:
+
+```bash
+sudo cat /var/lib/rancher/k3s/server/node-token
+```
+
+Replace `mynodetoken` with the node token you get from the server node.
+
 The console will prompt you for your password, and then it will start installing K3s. You will see output similar to the following:
 
 ```bash
@@ -39,15 +55,20 @@ when K3s is ready, the last line should show:
 Check if K3s is running by using the following command:
 
 ```bash
-sudo k3s kubectl get node
+sudo k3s kubectl get nodes
 ```
 
-You should see output similar to the following:
+You should see a list of all the nodes in your cluster:
 
 ```bash
-NAME                 STATUS   ROLES                  AGE   VERSION
-ubuntu-server-22-4   Ready    control-plane,master   10m   v1.23.3+k3s1
+NAME                  STATUS   ROLES                  AGE   VERSION
+ubuntu-server-2204    Ready    control-plane,master   42d   v1.29.4+k3s1
+dailygrind-worker-3   Ready    <none>                 39m   v1.29.5+k3s1
+dailygrind-worker-1   Ready    <none>                 61m   v1.29.5+k3s1
+dailygrind-worker-2   Ready    <none>                 50m   v1.29.5+k3s1
 ```
+
+With a multi-node cluster setup like this, your cluster has more resources to run your applications. The load is distributed across the nodes, and if one node fails, the other nodes can take over the work.
 
 In order to run k8s commands without having to add `sudo k3s`, you can run the following command:
 
