@@ -12,6 +12,7 @@ The platform is composed of several microservices, each serving a specific funct
 - **Comment Service**: An ASP.Net Core application that provides an API for creating and retrieving comments on posts.
 - **Posts Database**: A MongoDB database that stores the posts created by users.
 - **Comments Database**: A MongoDB database that stores the comments created by users.
+- **Kafka**: A distributed streaming platform that allows the services to communicate with each other.
 
 These services communicate with each other using Kafka, a distributed streaming platform. The entire application is containerized using Docker, which allows for easy deployment and scaling.
 
@@ -29,7 +30,7 @@ These services communicate with each other using Kafka, a distributed streaming 
 
 ## App structure
 
-The application is divided into three main applications: Frontend, API Gateway, and Post Service. Each backend service has its own responsibilities and communicates with the others through Kafka.
+The application is divided into four main applications: Frontend, API Gateway, Post Service and Comment Service. Each backend service has its own responsibilities and communicates with the others through Kafka.
 
 - **Frontend**: The frontend service is responsible for serving the user interface of the application. It communicates with the API Gateway to fetch and display data.
 - **API Gateway**: The API Gateway service acts as a reverse proxy for the other services. It receives requests from the frontend and forwards them to the appropriate service.
